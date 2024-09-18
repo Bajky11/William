@@ -119,7 +119,7 @@ function AssignedTicketsTable() {
     )
 }
 
-function ProjectsTicketsTable({projectId}) {
+export function ProjectsTicketsTable({projectId}) {
     const router = useRouter()
     const filter = useMemo(() => ({key: 'project_id', value: projectId}), [projectId]);
     useSupabaseRealtimeTable('tickets', projectTicketsSlice.actions, filter);
@@ -137,31 +137,6 @@ function ProjectsTicketsTable({projectId}) {
     return (
         <Stack>
             <CustomTable columns={columns} data={tickets} onRowClick={handleRowClick}/>
-        </Stack>
-    )
-}
-
-function ProjectsTable() {
-    useSupabaseRealtimeTable(PROJECTS_TABLE_NAME, timeLogsSlice.actions);
-    const time_logs = useSelector((state) => state.timeLogsSlice.data);
-
-    const columns = [
-        {field: 'name', headerName: 'Project name'},
-        {field: 'description', headerName: 'Description'},
-    ];
-
-    function handleRowClick(row) {
-        console.log('Processing row data:', row);
-        alert(row.name)
-    }
-
-    return (
-        <Stack p={1} gap={1}>
-            <Stack direction={'row'} alignItems={'center'} justifyContent={'space-between'} pl={0.5}>
-                <Typography variant={'h5'}>Projects List</Typography>
-                <Button variant={'contained'} size={'small'}>Add</Button>
-            </Stack>
-            <CustomTable columns={columns} data={projects} onRowClick={handleRowClick}/>
         </Stack>
     )
 }
