@@ -3,7 +3,7 @@ import {createTheme} from '@mui/material/styles';
 const theme = createTheme({
     palette: {
         primary: {
-            main: '#1976d2', // Modrá
+            main: '#000000', // Černá
         },
         secondary: {
             main: '#dc004e', // Růžová
@@ -24,12 +24,17 @@ const theme = createTheme({
             default: '#f5f5f5', // Světle šedá pro pozadí
         },
         text: {
-            primary: '#212121', // Tmavě šedá pro text
+            main: '#212121', // Tmavě šedá pro text
             secondary: '#757575', // Světlejší šedá pro vedlejší text
+            white: '#ffffff', // Bíla
+            action: '#1565c0'
         },
         action: {
-            primary: '#1565c0' // Tmavší modrá pro akce
-        }
+            main: '#1565c0' // Tmavší modrá pro akce
+        },
+        white:{
+            main: '#ffffff' // Bílá
+        },
     },
     typography: {
         fontSize: 14, // Základní velikost písma

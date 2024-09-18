@@ -16,6 +16,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/modules/indexPage/index.ts", "src/utils/redux/store.ts", "src/pages/api/hello.js"],
   "exclude": ["node_modules"]
 }

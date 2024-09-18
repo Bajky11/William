@@ -1,44 +1,71 @@
-import React, { useState } from 'react';
-import { supabase} from "../../utils/supabase/supabaseConfig";
+import React from 'react';
+import {TextField, Button, Container, Typography, Box, Stack} from '@mui/material';
+import {useLogin} from './hooks/useLogin';
+import {useForm} from "../shared/hooks/useForm";
+import {useRouter} from "next/router";
 
-const Login = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState(null);
-
-    const handleLogin = async (e) => {
-        e.preventDefault();
-        const { error } = await supabase.auth.signInWithPassword({
-            email,
-            password,
-        });
-        if (error) {
-            setError(error.message);
-        } else {
-            console.log('Login successful');
+const LoginPage = () => {
+    const router = useRouter();
+    const {error, handleLogin} = useLogin();
+    const {formData, errors, handleChange, handleSubmit} = useForm(
+        {email: 'lukin.bajer@gmail.com', password: 'tajneHeslo'},
+        async (formData) => {
+            await handleLogin(formData.email, formData.password);
         }
-    };
+    );
 
     return (
-        <div>
-            <form onSubmit={handleLogin}>
-                <input
-                    type="email"
-                    placeholder="Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                />
-                <input
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
-                <button type="submit">Login</button>
-            </form>
-            {error && <p>{error}</p>}
-        </div>
+        <Container maxWidth="sm">
+            <Stack
+                direction={'column'}
+                alignItems={'center'}
+                pt={8}
+                gap={2}
+            >
+                <Typography variant="h4" gutterBottom>
+                    Login
+                </Typography>
+                <form onSubmit={handleSubmit}>
+                    <TextField
+                        fullWidth
+                        label="Email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        margin="normal"
+                        variant="outlined"
+                        error={!!errors.email}
+                        helperText={errors.email}
+                    />
+                    <TextField
+                        fullWidth
+                        label="Password"
+                        type="password"
+                        name="password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        margin="normal"
+                        variant="outlined"
+                        error={!!errors.password}
+                        helperText={errors.password}
+                    />
+                    <Button
+                        fullWidth
+                        variant="contained"
+                        type="submit"
+                        sx={{mt: 2}}
+                    >
+                        Login
+                    </Button>
+                </form>
+                {error && <Typography color="error" sx={{mt: 2}}>{error.message}</Typography>}
+                <Stack>
+                    <Typography underline={'none'}>Dont have an account?</Typography>
+                    <Button onClick={() => router.push('/register')}>Create account</Button>
+                </Stack>
+            </Stack>
+        </Container>
     );
 };
 
-export default Login;
+export default LoginPage;
