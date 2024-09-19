@@ -8,14 +8,15 @@ import {useAsyncData} from "../../../utils/supabase/hooks/useAsyncData";
 import {getUsersActiveTimeLog} from "../../backend/functions/getUsersActiveTimeLog";
 import {secondsToHHMMSS} from "@/modules/shared/generalFunctions/time/secondsToHHMMSS";
 import {fetchActiveTimeLog, updateActiveTimeLog} from "../../../utils/redux/slices/activeTimeLogSlice";
-import {useCallback, useEffect} from "react";
-import {calculateElapsedTimeInSeconds} from "@/modules/shared/generalFunctions/time/calculateElapsedTimeInSeconds";
+import {useEffect} from "react";
 import useTimer from "../hooks/useTimer";
 import {calculateElapsedTime} from "@/modules/shared/functions/calculateElapsedTime";
 import {ActionIconButton} from "@/modules/shared/components/ActionIconButton";
+import {useRouter} from "next/router";
 
 
 export function ActiveTimeLog({ticketId}) {
+    const router = useRouter()
     const dispatch = useDispatch()
     const user = useSelector(state => state.loggedUser)
     const activeTimeLog = useSelector(state => state.activeTimeLog.data);
@@ -53,12 +54,16 @@ export function ActiveTimeLog({ticketId}) {
         dispatch(updateActiveTimeLog({action: actionName, time_log_id: timeLogId}));
     }
 
+    function onComponentClick(){
+        router.push(`tickets/${activeTimeLog.ticket_id}`)
+    }
+
     if (!activeTimeLog || (!timeLogBelongsToTicket && ticketId)) {
         return null;
     }
 
     return (
-        <Stack gap={1}>
+        <Stack gap={1} onClick={() => onComponentClick()}>
             <Typography variant={'h5'}>Active Ticket</Typography>
             <Stack bgcolor={'black'} justifyContent={'space-between'} direction={'row'} alignItems={'center'} p={1}
                    borderRadius={1}>
