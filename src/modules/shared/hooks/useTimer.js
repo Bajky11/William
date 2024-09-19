@@ -21,7 +21,7 @@ function useTimer(callback, interval = 1000) {
                 clearInterval(intervalRef.current);
             }
         };
-    }, [interval, isRunning]);
+    }, [ interval, isRunning]);
 
     // Funkce pro spuštění intervalu
     const start = useCallback(() => {

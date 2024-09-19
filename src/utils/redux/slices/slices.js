@@ -35,3 +35,4 @@ export const addProjectsTicket = addDataThunk(PROJECT_TICKETS_SLICE, TICKETS_TAB
 export const removeProjectsTicket = removeDataThunk(PROJECT_TICKETS_SLICE, TICKETS_TABLE_NAME)
 
 export const timeLogsSlice = createGenericSlice(TIME_LOGS_SLICE, TIME_LOGS_TABLE_NAME);
+export const addTimeLog = addDataThunk(TIME_LOGS_SLICE,TIME_LOGS_TABLE_NAME);

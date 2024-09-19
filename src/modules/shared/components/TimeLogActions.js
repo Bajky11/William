@@ -4,10 +4,11 @@ import PlayCircleRoundedIcon from "@mui/icons-material/PlayCircleRounded";
 import PauseCircleRoundedIcon from "@mui/icons-material/PauseCircleRounded";
 import StopCircleRoundedIcon from "@mui/icons-material/StopCircleRounded";
 import {useSelector} from "react-redux";
-import {TIME_LOGS_TABLE_NAME} from "../../../utils/redux/slices/slices";
+import {addTimeLog, TIME_LOGS_TABLE_NAME} from "../../../utils/redux/slices/slices";
 import {useAsyncData} from "../../../utils/supabase/hooks/useAsyncData";
 import {getUsersActiveTimeLog} from "../../backend/functions/getUsersActiveTimeLog";
 import {setActiveTimeLog} from "../../../utils/redux/slices/activeTimeLogSlice";
+import { DateTime } from 'luxon';
 
 export function TimeLogActions({ticketId}) {
     const user = useSelector(state => state.loggedUser)
@@ -90,7 +91,7 @@ export async function handleActions2(action, timeLog, dispatch) {
     }
 }
 
-export async function runNewTimeLog(userId, ticketId) {
+export async function createAndStartTimeLog(userId, ticketId, dispatch) {
     const userActiveTimeLog = await isUserRunningATimeLog(userId);
 
     if (userActiveTimeLog) {
@@ -99,11 +100,22 @@ export async function runNewTimeLog(userId, ticketId) {
         return;
     }
 
-    console.log("Creating new time_log")
-    const {data, error} = await supabase.from(TIME_LOGS_TABLE_NAME).insert({
-        ticket_id: ticketId, user_id: userId, description: 'Nový time log', state: 'Running'
-    });
+    //TODO: This is not correct or pretty, the activeTimeLog should be realtime, so there should not be setting the redux store like this, but for now i am doing it like this...
+    const newTimeLog = {
+        ticket_id: ticketId,
+        user_id: userId,
+        description: 'Nový time log',
+    }
+
+
+    let { data, error } = await supabase
+        .rpc('create_time_log', {
+            p_description: 'Nový time log',
+            p_ticket_id: ticketId,
+            p_user_id: userId
+        })
     if (error) console.error(error)
+    dispatch(setActiveTimeLog(data[0]))
 }
 
 export async function isUserRunningATimeLog(userId) {

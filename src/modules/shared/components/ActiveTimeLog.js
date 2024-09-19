@@ -6,27 +6,14 @@ import {handleActions2} from "./TimeLogActions";
 import {useDispatch, useSelector} from "react-redux";
 import {useAsyncData} from "../../../utils/supabase/hooks/useAsyncData";
 import {getUsersActiveTimeLog} from "../../backend/functions/getUsersActiveTimeLog";
-import {secondsToHHMMSS} from "../functions/time/secondsToHHMMSS";
+import {secondsToHHMMSS} from "@/modules/shared/generalFunctions/time/secondsToHHMMSS";
 import {fetchActiveTimeLog, updateActiveTimeLog} from "../../../utils/redux/slices/activeTimeLogSlice";
 import {useCallback, useEffect} from "react";
-import {calculateElapsedTimeInSeconds} from "../functions/time/calculateElapsedTimeInSeconds";
+import {calculateElapsedTimeInSeconds} from "@/modules/shared/generalFunctions/time/calculateElapsedTimeInSeconds";
 import useTimer from "../hooks/useTimer";
+import {calculateElapsedTime} from "@/modules/shared/functions/calculateElapsedTime";
+import {ActionIconButton} from "@/modules/shared/components/ActionIconButton";
 
-function ActionIconButton({Icon, onClick, disabled, color}) {
-    return (
-        <IconButton
-            size={'small'}
-            color={color ? color : 'white'}
-            onClick={onClick}
-            disabled={disabled}
-            style={{
-                color: disabled ? '#888888' : (color ? color : 'white'),
-            }}
-        >
-            {Icon}
-        </IconButton>
-    )
-}
 
 export function ActiveTimeLog({ticketId}) {
     const dispatch = useDispatch()
@@ -45,8 +32,10 @@ export function ActiveTimeLog({ticketId}) {
     }, [dispatch, user]);
 
     useEffect(() => {
-        if(!activeTimeLog || (!timeLogBelongsToTicket && ticketId)) return
-
+        if(!activeTimeLog || (!timeLogBelongsToTicket && ticketId)){
+            stop()
+            return;
+        }
         switch (activeTimeLog?.state) {
             case 'Running':
                 start();
@@ -58,20 +47,10 @@ export function ActiveTimeLog({ticketId}) {
             default:
                 stop()
         }
-    }, [start, stop, activeTimeLog?.state])
+    }, [activeTimeLog])
 
     function updateTimeLog(actionName, timeLogId) {
         dispatch(updateActiveTimeLog({action: actionName, time_log_id: timeLogId}));
-    }
-
-    function calculateElapsedTime(timeLog) {
-        let elapsedSecondsTotal = 0;
-        if(timeLog.start){
-            const elapsedSecondsFromStart = calculateElapsedTimeInSeconds(timeLog.start)
-            elapsedSecondsTotal += elapsedSecondsFromStart;
-        }
-        elapsedSecondsTotal += timeLog.elapsed;
-        return secondsToHHMMSS(elapsedSecondsTotal);
     }
 
     if (!activeTimeLog || (!timeLogBelongsToTicket && ticketId)) {

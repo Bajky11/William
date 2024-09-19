@@ -18,7 +18,7 @@ export const updateActiveTimeLog = createAsyncThunk(
     `activeTimeLog/update`,
     async ({action, time_log_id}) => {
         const {data, error} = await supabase.rpc('update_time_log', {
-            action, time_log_id
+            action: action, time_log_id:time_log_id
         });
         if (error) throw error;
         return data;
@@ -34,10 +34,10 @@ const activeTimeLogSlice = createSlice({
     },
     reducers: {
         setActiveTimeLog: (state, action) => {
-            return action.payload;
+            state.data = action.payload
         },
-        removeActiveTimeLog: () => {
-            return null
+        removeActiveTimeLog: (state) => {
+            state.data = null;
         }
     },
     extraReducers: (builder) => {
