@@ -54,7 +54,8 @@ export function ActiveTimeLog({ticketId}) {
         dispatch(updateActiveTimeLog({action: actionName, time_log_id: timeLogId}));
     }
 
-    function onComponentClick(){
+    function onComponentClick(event){
+        event.stopPropagation()
         router.push(`tickets/${activeTimeLog.ticket_id}`)
     }
 
@@ -63,7 +64,7 @@ export function ActiveTimeLog({ticketId}) {
     }
 
     return (
-        <Stack gap={1} onClick={() => onComponentClick()}>
+        <Stack gap={1} onClick={(event) => onComponentClick(event)}>
             <Typography variant={'h5'}>Active Ticket</Typography>
             <Stack bgcolor={'black'} justifyContent={'space-between'} direction={'row'} alignItems={'center'} p={1}
                    borderRadius={1}>
