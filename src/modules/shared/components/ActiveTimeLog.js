@@ -15,7 +15,7 @@ import {ActionIconButton} from "@/modules/shared/components/ActionIconButton";
 import {useRouter} from "next/router";
 
 
-export function ActiveTimeLog({ticketId}) {
+export function ActiveTimeLog({ticketId, enableNavigation = false}) {
     const router = useRouter()
     const dispatch = useDispatch()
     const user = useSelector(state => state.loggedUser)
@@ -33,7 +33,7 @@ export function ActiveTimeLog({ticketId}) {
     }, [dispatch, user]);
 
     useEffect(() => {
-        if(!activeTimeLog || (!timeLogBelongsToTicket && ticketId)){
+        if (!activeTimeLog || (!timeLogBelongsToTicket && ticketId)) {
             stop()
             return;
         }
@@ -50,12 +50,13 @@ export function ActiveTimeLog({ticketId}) {
         }
     }, [activeTimeLog])
 
-    function updateTimeLog(actionName, timeLogId) {
+    function updateTimeLog(event, actionName, timeLogId) {
+        event.stopPropagation()
         dispatch(updateActiveTimeLog({action: actionName, time_log_id: timeLogId}));
     }
 
-    function onComponentClick(event){
-        event.stopPropagation()
+    function onComponentClick() {
+        if (!enableNavigation) return
         router.push(`tickets/${activeTimeLog.ticket_id}`)
     }
 
@@ -64,7 +65,7 @@ export function ActiveTimeLog({ticketId}) {
     }
 
     return (
-        <Stack gap={1} onClick={(event) => onComponentClick(event)}>
+        <Stack gap={1} onClick={() => onComponentClick()}>
             <Typography variant={'h5'}>Active Ticket</Typography>
             <Stack bgcolor={'black'} justifyContent={'space-between'} direction={'row'} alignItems={'center'} p={1}
                    borderRadius={1}>
@@ -77,14 +78,14 @@ export function ActiveTimeLog({ticketId}) {
                     <Divider orientation={'vertical'} color={'white'} sx={{height: '20px'}}/>
                     <Stack direction={'row'} alignItems={'center'}>
 
-                        <ActionIconButton onClick={() => updateTimeLog('play', activeTimeLog.id)}
+                        <ActionIconButton onClick={(event) => updateTimeLog(event, 'play', activeTimeLog.id)}
                                           Icon={<PlayCircleRoundedIcon fontSize={'large'}/>}
                                           disabled={timeLogIsRunning}
                         />
-                        <ActionIconButton onClick={() => updateTimeLog('pause', activeTimeLog.id)}
+                        <ActionIconButton onClick={(event) => updateTimeLog(event, 'pause', activeTimeLog.id)}
                                           Icon={<PauseCircleRoundedIcon fontSize={'large'}/>}
                                           disabled={timeLogIsPaused}/>
-                        <ActionIconButton onClick={() => updateTimeLog('stop', activeTimeLog.id)}
+                        <ActionIconButton onClick={(event) => updateTimeLog(event, 'stop', activeTimeLog.id)}
                                           Icon={<StopCircleRoundedIcon fontSize={'large'}/>}/>
                     </Stack>
                 </Stack>

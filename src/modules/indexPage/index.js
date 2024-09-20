@@ -1,8 +1,7 @@
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import {
-    PROJECTS_TABLE_NAME,
     projectsSlice,
-    projectTicketsSlice, timeLogsSlice,
+    projectTicketsSlice,
     userTicketsSlice
 } from "../../utils/redux/slices/slices";
 import useSupabaseRealtimeTable from "../../utils/supabase/hooks/useSupabaseRealtimeTable";
@@ -15,7 +14,7 @@ import {ActiveTimeLog} from "../shared/components/ActiveTimeLog";
 export default function IndexPage() {
     return (
         <Stack gap={2} p={1}>
-            <ActiveTimeLog/>
+            <ActiveTimeLog enableNavigation={true}/>
             <AssignedTicketsTable/>
             <ProjectsTabs/>
         </Stack>
