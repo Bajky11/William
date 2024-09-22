@@ -91,7 +91,7 @@ export async function handleActions2(action, timeLog, dispatch) {
     }
 }
 
-export async function createAndStartTimeLog(userId, ticketId, dispatch) {
+export async function createAndStartTimeLog(userId, ticketId, description, dispatch) {
     const userActiveTimeLog = await isUserRunningATimeLog(userId);
 
     if (userActiveTimeLog) {
@@ -101,16 +101,10 @@ export async function createAndStartTimeLog(userId, ticketId, dispatch) {
     }
 
     //TODO: This is not correct or pretty, the activeTimeLog should be realtime, so there should not be setting the redux store like this, but for now i am doing it like this...
-    const newTimeLog = {
-        ticket_id: ticketId,
-        user_id: userId,
-        description: 'Nový time log',
-    }
-
 
     let { data, error } = await supabase
         .rpc('create_time_log', {
-            p_description: 'Nový time log',
+            p_description: description,
             p_ticket_id: ticketId,
             p_user_id: userId
         })

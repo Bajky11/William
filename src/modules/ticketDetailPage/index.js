@@ -1,47 +1,115 @@
 import useSupabaseRealtimeTable from "../../utils/supabase/hooks/useSupabaseRealtimeTable";
 import {useMemo} from "react";
-import {addTimeLog, TIME_LOGS_TABLE_NAME, timeLogsSlice, userTicketsSlice} from "../../utils/redux/slices/slices";
-import {Divider, IconButton, Stack, Typography} from "@mui/material";
+import {
+    TIME_LOGS_TABLE_NAME,
+    timeLogsSlice,
+    userTicketsSlice
+} from "../../utils/redux/slices/slices";
+import {Button, IconButton, Stack, Typography} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
 import Paper from "@mui/material/Paper";
 import CustomTable from "../shared/components/CustomTable";
-import {createAndStartTimeLog, TimeLogActions} from "../shared/components/TimeLogActions";
+import {createAndStartTimeLog} from "../shared/components/TimeLogActions";
 import {ActiveTimeLog} from "../shared/components/ActiveTimeLog";
 import PlayCircleRoundedIcon from "@mui/icons-material/PlayCircleRounded";
 import {updateActiveTimeLog} from "../../utils/redux/slices/activeTimeLogSlice";
-import {calculateElapsedTimeInSeconds} from "@/modules/shared/generalFunctions/time/calculateElapsedTimeInSeconds";
 import {calculateElapsedTime} from "@/modules/shared/functions/calculateElapsedTime";
 import {ActionIconButton} from "@/modules/shared/components/ActionIconButton";
+import useModal from "@/modules/shared/hooks/useModal";
+import {DynamicForm} from "@/modules/shared/components/DynamicForm";
+import {useAsyncData} from "@/utils/supabase/hooks/useAsyncData";
+import {getUsersActiveTimeLog} from "@/modules/backend/functions/getUsersActiveTimeLog";
+import {getUserById} from "@/modules/backend/functions/getUserById";
+import {updateTicketUserId} from "@/modules/backend/functions/updateTicketUserId";
 
 // TODO: Consider making this page static, there may be no need for useSupabaseRealtimeTable(), and can be simply done by fetchTickets with filter
 export default function TicketDetailPage({ticketId}) {
-    const dispatch = useDispatch()
     const filter = useMemo(() => ({key: 'id', value: ticketId}), [ticketId])
     const enabled = ticketId != null;
     useSupabaseRealtimeTable('tickets', userTicketsSlice.actions, filter, enabled);
     const ticket = useSelector(state => state.usersTickets.data[0])
     const user = useSelector(state => state.loggedUser);
+    const {openModal, CustomModal} = useModal();
+    //TODO: Toto hazí error, jelikož když ticket nemá žadý user_id, tak je požodavak na databázi chybný.
+    const {data: ticketOwner, loading, error} = useAsyncData(getUserById, [ticket?.user_id], [ticket?.user_id]);
+    const ticketHasOwner = ticketOwner != null;
 
-    if (!ticket || !user) {
+    if (!ticket || !user || loading) {
         return 'loading'
     }
 
+    function assignTicketToUserById(ticketId, userId) {
+        updateTicketUserId(ticketId, userId)
+    }
+
+    console.log(ticketOwner)
+
     return (
-        <Stack gap={2} p={1}>
-            <Stack component={Paper} gap={1}>
-                <Stack bgcolor={'black'} p={1} sx={{borderRadius: '4px 4px 0 0'}} direction={'row'} gap={2}>
-                    <Typography variant={'h4'} color={'text.white'}>{ticket.name}</Typography>
-                    <ActionIconButton onClick={() => createAndStartTimeLog(user.id, ticket.id, dispatch)}
-                                      Icon={<PlayCircleRoundedIcon fontSize={'large'}/>}/>
+        <div>
+            <Stack gap={2} p={1}>
+                <Stack component={Paper}>
+                    <Stack bgcolor={'black'} p={1} sx={{borderRadius: '4px 4px 0 0'}} direction={'row'} gap={2}>
+                        <Typography variant={'h4'} color={'text.white'}>{ticket.name}</Typography>
+                        <ActionIconButton onClick={() => openModal()}
+                                          Icon={<PlayCircleRoundedIcon fontSize={'large'}/>}/>
+                    </Stack>
+                    <Stack p={1} direction={'row'} gap={1} alignItems={"center"}>
+                        <Typography fontWeight={'bold'}>Owner:</Typography>
+                        <Typography>{ticketHasOwner ? (
+                            <Stack direction={"row"} gap={1} alignItems={"center"}>
+                                <Typography>{ticketOwner?.name}</Typography>
+                                <Button
+                                    onClick={() => assignTicketToUserById(ticketId, null)}
+                                    color={"primary"}
+                                    variant={'contained'}
+                                    size={'small'}
+                                >Return ticket
+                                </Button>
+                           </Stack>
+
+                        ) : (
+                            <Stack direction={"row"} gap={1} alignItems={"center"}>
+                                <Typography>nobody</Typography>
+                                <Button
+                                    onClick={() => assignTicketToUserById(ticketId, user.id)}
+                                    color={"primary"}
+                                    variant={'contained'}
+                                    size={'small'}
+                                >Assign to me
+                                </Button>
+                            </Stack>
+                        )}</Typography>
+                    </Stack>
+                    <Stack p={1} direction={'row'} gap={1}>
+                        <Typography fontWeight={'bold'}>Description:</Typography>
+                        <Typography>{ticket.description}</Typography>
+                    </Stack>
                 </Stack>
-                <Stack p={1}>
-                    <Typography>{ticket.description}</Typography>
-                </Stack>
+                <ActiveTimeLog ticketId={ticketId}/>
+                <TicketTimeLogsTable ticketId={ticketId}/>
             </Stack>
-            <ActiveTimeLog ticketId={ticketId}/>
-            <TicketTimeLogsTable ticketId={ticketId}/>
-        </Stack>
+            <CustomModal
+                ModalBody={NewTimeLogModalBody}
+                heading="Vytvoření nového time logu"
+                modalProps={{userId: user.id, ticketId: ticket.id}}
+            />
+        </div>
     );
+}
+
+function NewTimeLogModalBody({closeModal, userId, ticketId}) {
+    const dispatch = useDispatch()
+
+    const handleSubmit = async (formData) => {
+        createAndStartTimeLog(userId, ticketId, formData.description, dispatch)
+        closeModal()
+    };
+
+    const fields = [
+        {fieldName: 'description', label: 'Description', type: 'text', required: true},
+    ]
+
+    return <DynamicForm fields={fields} onSubmit={handleSubmit}/>
 }
 
 function TicketTimeLogsTable({ticketId}) {
