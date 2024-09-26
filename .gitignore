@@ -34,3 +34,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Ignorovat soubory a složky IntelliJ/IDEA
+.idea/
+*.iml
+
+# Ostatní soubory, které chcete ignorovat
+.vscode/
