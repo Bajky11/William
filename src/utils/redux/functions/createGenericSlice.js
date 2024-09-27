@@ -31,11 +31,17 @@ export const removeDataThunk = (sliceName, tableName) => {
 // Generický thunk pro update dat tabulky
 export const updateDataThunk = (sliceName, tableName) => {
     return createAsyncThunk(`${sliceName}/updateData`, async ({id, updatedData}) => {
-        const {data, error} = await supabase.from(tableName).update(updatedData).eq('id', id).select();
+        const {data, error} = await supabase
+            .from(tableName)
+            .update(updatedData)
+            .eq('id', id)
+            .select();
+
         if (error) throw error;
         return data;
-    })
-}
+    });
+};
+
 
 // Funkce, která vytváří generický slice pro jakoukoli tabulku supabase
 export const createGenericSlice = (sliceName, tableName) => {
@@ -114,12 +120,12 @@ export const createGenericSlice = (sliceName, tableName) => {
                     console.log(action)
                     state.data = state.data.filter((item) => item.id !== action.payload[0].id);
                 })
-                .addCase(removeData.rejected, state => {
+                .addCase(removeData.rejected, (state, action) => {
                     state.status = 'failed';
                     state.error = action.error.message;
                 })
-            //  UpdateData
-            //
+                //  UpdateData
+                //
                 .addCase(updateData.pending, state => {
                     state.status = 'loading';
                 })
@@ -132,7 +138,7 @@ export const createGenericSlice = (sliceName, tableName) => {
                         state.data[index] = action.payload[0]; // Aktualizujeme data na nová data
                     }
                 })
-                .addCase(updateData.rejected, state => {
+                .addCase(updateData.rejected, (state, action) => {
                     state.status = 'failed';
                     state.error = action.error.message;
                 })

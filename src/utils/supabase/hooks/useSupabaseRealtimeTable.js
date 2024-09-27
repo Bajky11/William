@@ -1,43 +1,38 @@
 import {useEffect} from 'react';
 import {useDispatch} from 'react-redux';
 import {supabase} from "../supabaseConfig";
-/*
-In components where you want to fetch all data (filter=null, enabled=true)
-useSupabaseRealtimeTable('tickets', allTicketsSlice.actions);
 
-In scenarios where you don't want to fetch any data: (filter=any, enabled=false)
-useSupabaseRealtimeTable('tickets', someSlice.actions, false);
+//IF YOU WANT TO NEGATE FILTER:            [ {key: 'state',value: 'closed', negate: true} ]
 
-In scenarios where you want to fetch only filtered data or no data. (Waiting for redux to introduce value, after it is introduced, hook is called with filter and enabled, otherwise the hook is disabled)
-const value = useSelector(state => state.value)
-const filter = useMemo(() => {key:"id", value: value},[value])
-const enabled = value != null
-useSupabaseRealtimeTable('tickets', someSlice.actions, filter, enabled);
-
-* */
-const useSupabaseRealtimeTable = (tableName, sliceActions, filter = null, enabled = true) => {
+const useSupabaseRealtimeTable = (tableName, sliceActions, filters = null, enabled = true) => {
     const dispatch = useDispatch();
 
     const fetchData = async () => {
         let query = supabase.from(tableName).select('*');
 
-        if (filter) {
-            query = query.eq(filter.key, filter.value);
+        // Ensure filters is always an array
+        const activeFilters = Array.isArray(filters) ? filters : [];
+
+        if (activeFilters.length > 0) {
+            activeFilters.forEach(filter => {
+                if (filter.negate) {
+                    query = query.neq(filter.key, filter.value); // Použití negace
+                } else {
+                    query = query.eq(filter.key, filter.value); // Klasické filtrování
+                }
+            });
         }
 
         const {data, error} = await query;
 
         if (error) {
             console.error('Error fetching data:', error);
-            // Optionally, dispatch an action to set error state
-            // dispatch(sliceActions.setError(error.message));
             return;
         }
 
         dispatch(sliceActions.setData(data));
     };
 
-    // Nastavení listeneru pro realtime změny v tabulce
     const setupRealtimeUpdates = () => {
         const subscription = supabase
             .channel(`public:${tableName}`)
@@ -47,9 +42,20 @@ const useSupabaseRealtimeTable = (tableName, sliceActions, filter = null, enable
                 (payload) => {
                     const {eventType, new: newData, old: oldData} = payload;
 
-                    // Apply filter to the incoming data
-                    if (filter && newData && newData[filter.key] !== filter.value) {
-                        return; // Ignore this update as it doesn't match the filter
+                    const activeFilters = Array.isArray(filters) ? filters : [];
+
+                    // Apply filters to the incoming data
+                    if (activeFilters.length > 0) {
+                        const matchesFilters = activeFilters.every(filter => {
+                            if (filter.negate) {
+                                return newData && newData[filter.key] !== filter.value;
+                            } else {
+                                return newData && newData[filter.key] === filter.value;
+                            }
+                        });
+                        if (!matchesFilters) {
+                            return; // Ignore this update as it doesn't match the filters
+                        }
                     }
 
                     switch (eventType) {
@@ -68,33 +74,29 @@ const useSupabaseRealtimeTable = (tableName, sliceActions, filter = null, enable
                 }
             )
             .subscribe();
-        //console.log('Subscription added for', tableName);
 
-        // Odstranění listeneru při odpojení komponenty
         return () => {
             supabase.removeChannel(subscription);
-            //console.log('Subscription removed for', tableName);
         };
     };
 
-
     useEffect(() => {
         if (!enabled) {
-            // Do not fetch data or set up subscription
             return;
         }
 
-        if (filter && (!filter.key || filter.value === undefined || filter.value === null)) {
-            console.warn("Filter not valid");
+        const activeFilters = Array.isArray(filters) ? filters : [];
+
+        if (activeFilters.some(filter => !filter.key || filter.value === undefined || filter.value === null)) {
+            console.warn("Some filters are not valid");
             return;
         }
 
         fetchData();
-        const cleanup = setupRealtimeUpdates(); // Nastavení listeneru
-        return () => cleanup(); // Čištění listeneru při unmountu komponenty
+        const cleanup = setupRealtimeUpdates();
+        return () => cleanup();
 
-
-    }, [tableName, filter, sliceActions,enabled]);
+    }, [tableName, filters, sliceActions, enabled]);
 };
 
 export default useSupabaseRealtimeTable;

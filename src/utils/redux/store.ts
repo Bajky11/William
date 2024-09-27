@@ -22,7 +22,7 @@ export const store = configureStore({
         projectsTickets: projectTicketsSlice.reducer,
         timeLogs: timeLogsSlice.reducer
     },
-    //middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

@@ -31,14 +31,15 @@ export default function ProjectDetail() {
 function ProjectsTicketsTable({projectId}) {
     const dispatch = useDispatch()
     const router = useRouter()
-    const filter = useMemo(() => ({key: 'project_id', value: projectId}), [projectId]);
+    const filter = useMemo(() => ([{key: 'project_id', value: projectId}]), [projectId]);
     useSupabaseRealtimeTable('tickets', projectTicketsSlice.actions, filter);
     const tickets = useSelector(state => state.projectsTickets.data)
     const {openModal, CustomModal} = useModal();
 
     const columns = [
         {field: 'name', headerName: 'Ticket name'},
-        {field: 'description', headerName: 'Description'},
+        {field: 'type', headerName: 'Type'},
+        {field: 'state', headerName: 'State'},
         {
             field: 'action', headerName: 'Actions', align: 'right', render: (_, row) => {
                 return <CustomMenu menuItems={createMenuItems(row)}/>

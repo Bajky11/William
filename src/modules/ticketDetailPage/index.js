@@ -25,13 +25,6 @@ import {openNewTimeLogModal} from "@/modules/ticketDetailPage/modals/NewTimeLogM
 // TODO: Consider making this page static, there may be no need for useSupabaseRealtimeTable(), and can be simply done by fetchTickets with filter
 export default function TicketDetailPage({ticketId, ticket, loggedUser}) {
     const dispatch = useDispatch()
-    const filter = useMemo(() => ({key: 'id', value: ticketId}), [ticketId])
-    const enabled = ticketId != null;
-    useSupabaseRealtimeTable('tickets', userTicketsSlice.actions, filter, enabled);
-
-    function assignTicketToUserById(ticketId, userId) {
-        updateTicketUserId(ticketId, userId)
-    }
 
     return (
         <div>
@@ -42,7 +35,7 @@ export default function TicketDetailPage({ticketId, ticket, loggedUser}) {
                         <ActionIconButton onClick={() => openNewTimeLogModal(dispatch, loggedUser.id, ticketId)}
                                           Icon={<PlayCircleRoundedIcon fontSize={'large'}/>}/>
                     </Stack>
-                    <TicketActions ticket={ticket}/>
+                    <TicketActions ticket={ticket} loggedUser={loggedUser}/>
                     <TicketDetails ticket={ticket}/>
                 </Stack>
                 <ActiveTimeLog ticketId={ticketId}/>
@@ -56,7 +49,7 @@ export default function TicketDetailPage({ticketId, ticket, loggedUser}) {
 
 function TicketTimeLogsTable({ticketId}) {
     const dispatch = useDispatch()
-    const filter = useMemo(() => ({key: 'ticket_id', value: ticketId}), [ticketId])
+    const filter = useMemo(() => ([{key: 'ticket_id', value: ticketId}]), [ticketId])
     const enabled = ticketId != null;
     useSupabaseRealtimeTable(TIME_LOGS_TABLE_NAME, timeLogsSlice.actions, filter, enabled);
     const projects = useSelector((state) => state.timeLogs.data);

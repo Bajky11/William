@@ -18,11 +18,10 @@ export function TicketDetails({ticket}) {
 
     return (
         <Box>
-            <DetailRow label={'Owner:'} value={ticketHasOwner ? ticketOwner?.name : ''}/>
+            <DetailRow label={'Owner:'} value={ticketHasOwner ? ticketOwner?.name : 'Ticket does not have owner'}/>
             <DetailRow label={'Description:'} value={ticket.description}/>
             <DetailRow label={'Stav:'} value={ticket.state}/>
             <DetailRow label={'Typ:'} value={ticket.type}/>
         </Box>
-
     )
 }

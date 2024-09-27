@@ -1,4 +1,4 @@
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import {
     projectsSlice,
     projectTicketsSlice,
@@ -10,7 +10,7 @@ import {Box, Button, Stack, Tab, Tabs, Typography} from "@mui/material";
 import {useMemo, useState} from "react";
 import {useRouter} from "next/router";
 import {ActiveTimeLog} from "../shared/components/ActiveTimeLog";
-import {openModal} from "@/utils/redux/slices/modalSlice";
+import {CustomTabs} from "@/modules/shared/components/CustomTabs";
 
 export default function IndexPage() {
 
@@ -43,44 +43,6 @@ function ProjectsTabs() {
     )
 }
 
-function CustomTabs({data}) {
-    const [value, setValue] = useState(data[0].value);
-
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
-    };
-
-    return (
-        <Box sx={{width: '100%'}}>
-            <Tabs
-                value={value}
-                onChange={handleChange}
-                aria-label="secondary tabs example"
-                textColor="secondary"
-
-                variant="scrollable"
-            >
-                {
-                    data.map(tab => (
-                        <Tab
-                            key={tab.value}
-                            value={tab.value}
-                            label={tab.headerName}
-                            sx={{
-                                backgroundColor: value === tab.value ? 'black' : 'white',
-                                color: value === tab.value ? 'white' : 'black',
-                                borderRadius: '4px 4px 0 0',
-                            }}
-                        />
-                    ))
-                }
-            </Tabs>
-            {
-                data.find(tab => tab.value === value)?.render
-            }
-        </Box>
-    );
-}
 
 function AssignedTicketsTable() {
     const router = useRouter()
@@ -88,7 +50,10 @@ function AssignedTicketsTable() {
 
     const filter = useMemo(() => {
         if (loggedUserId != null) {
-            return {key: 'user_id', value: loggedUserId};
+            return [
+                {key: 'user_id', value: loggedUserId},
+                {key: 'state',value: 'closed', negate: true}
+            ];
         } else {
             return null;
         }
@@ -122,8 +87,12 @@ function AssignedTicketsTable() {
 
 export function ProjectsTicketsTable({projectId}) {
     const router = useRouter()
-    const filter = useMemo(() => ({key: 'project_id', value: projectId}), [projectId]);
-    useSupabaseRealtimeTable('tickets', projectTicketsSlice.actions, filter);
+    const filters = useMemo(() => ([
+            {key: 'project_id', value: projectId},
+            {key: 'state',value: 'available'},
+        ]
+    ), [projectId]);
+    useSupabaseRealtimeTable('tickets', projectTicketsSlice.actions, filters);
     const tickets = useSelector(state => state.projectsTickets.data)
 
     const columns = [
