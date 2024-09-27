@@ -2,7 +2,7 @@ import "@/styles/globals.css";
 import "../styles/globals.css";
 import type {AppProps} from "next/app";
 import {Provider, useDispatch, useSelector} from "react-redux";
-import {store} from "@/utils/redux/store";
+import {RootState, store} from "@/utils/redux/store";
 import {ThemeProvider} from '@mui/material/styles';
 import theme from "@/utils/mui/theme";
 import Navbar from "@/modules/shared/components/Navbar";
@@ -31,7 +31,7 @@ export default function App({Component, pageProps}: AppProps) {
 
 function GlobalModal() {
     const dispatch = useDispatch();
-    const modalState = useSelector((state) => state.modal);
+    const modalState = useSelector((state:RootState) => state.modal);
 
     const handleCloseModal = () => {
         dispatch(closeModal());
