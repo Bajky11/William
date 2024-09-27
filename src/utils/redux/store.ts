@@ -9,12 +9,14 @@ import {
 } from "@/utils/redux/slices/slices";
 import loggedUserSliceReducer from "@/utils/redux/slices/loggedUserSlice";
 import activeTimeLogReducer from "@/utils/redux/slices/activeTimeLogSlice";
+import modalSlice from "@/utils/redux/slices/modalSlice";
 
 
 export const store = configureStore({
     reducer: {
-        activeTimeLog: activeTimeLogReducer,
+        modal: modalSlice,
         loggedUser: loggedUserSliceReducer,
+        activeTimeLog: activeTimeLogReducer,
         projects: projectsSlice.reducer,
         usersTickets: userTicketsSlice.reducer,
         projectsTickets: projectTicketsSlice.reducer,

@@ -28,11 +28,21 @@ export const removeDataThunk = (sliceName, tableName) => {
     });
 };
 
+// Generický thunk pro update dat tabulky
+export const updateDataThunk = (sliceName, tableName) => {
+    return createAsyncThunk(`${sliceName}/updateData`, async ({id, updatedData}) => {
+        const {data, error} = await supabase.from(tableName).update(updatedData).eq('id', id).select();
+        if (error) throw error;
+        return data;
+    })
+}
+
 // Funkce, která vytváří generický slice pro jakoukoli tabulku supabase
 export const createGenericSlice = (sliceName, tableName) => {
     const fetchData = fetchDataThunk(sliceName, tableName);
     const addData = addDataThunk(sliceName, tableName);
     const removeData = removeDataThunk(sliceName, tableName);
+    const updateData = updateDataThunk(sliceName, tableName);
 
     return createSlice({
         name: sliceName,
@@ -105,6 +115,24 @@ export const createGenericSlice = (sliceName, tableName) => {
                     state.data = state.data.filter((item) => item.id !== action.payload[0].id);
                 })
                 .addCase(removeData.rejected, state => {
+                    state.status = 'failed';
+                    state.error = action.error.message;
+                })
+            //  UpdateData
+            //
+                .addCase(updateData.pending, state => {
+                    state.status = 'loading';
+                })
+                .addCase(updateData.fulfilled, (state, action) => {
+                    state.status = 'succeeded';
+                    console.log(action.payload)
+                    // Najdeme položku s odpovídajícím ID a aktualizujeme ji
+                    const index = state.data.findIndex((item) => item.id === action.payload[0].id);
+                    if (index !== -1) {
+                        state.data[index] = action.payload[0]; // Aktualizujeme data na nová data
+                    }
+                })
+                .addCase(updateData.rejected, state => {
                     state.status = 'failed';
                     state.error = action.error.message;
                 })

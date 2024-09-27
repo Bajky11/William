@@ -1,4 +1,10 @@
-import {addDataThunk, createGenericSlice, fetchDataThunk, removeDataThunk} from "../functions/createGenericSlice";
+import {
+    addDataThunk,
+    createGenericSlice,
+    fetchDataThunk,
+    removeDataThunk,
+    updateDataThunk
+} from "../functions/createGenericSlice";
 
 const ALL_PROJECTS_SLICE = 'allProjects'
 const ALL_TICKETS_SLICE = 'allTickets'
@@ -27,6 +33,7 @@ export const userTicketsSlice = createGenericSlice(USER_TICKETS_SLICE, TICKETS_T
 export const fetchUsersTickets = fetchDataThunk(USER_TICKETS_SLICE, TICKETS_TABLE_NAME);
 export const addUsersTicket = addDataThunk(USER_TICKETS_SLICE, TICKETS_TABLE_NAME);
 export const removeUsersTicket = removeDataThunk(USER_TICKETS_SLICE, TICKETS_TABLE_NAME)
+export const updateUserTicket = updateDataThunk(USER_TICKETS_SLICE, TICKETS_TABLE_NAME)
 
 // TicketsSlice
 export const projectTicketsSlice = createGenericSlice(PROJECT_TICKETS_SLICE, TICKETS_TABLE_NAME);

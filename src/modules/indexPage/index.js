@@ -1,17 +1,19 @@
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {
     projectsSlice,
     projectTicketsSlice,
     userTicketsSlice
-} from "../../utils/redux/slices/slices";
+} from "@/utils/redux/slices/slices";
 import useSupabaseRealtimeTable from "../../utils/supabase/hooks/useSupabaseRealtimeTable";
 import CustomTable from "../shared/components/CustomTable";
 import {Box, Button, Stack, Tab, Tabs, Typography} from "@mui/material";
 import {useMemo, useState} from "react";
 import {useRouter} from "next/router";
 import {ActiveTimeLog} from "../shared/components/ActiveTimeLog";
+import {openModal} from "@/utils/redux/slices/modalSlice";
 
 export default function IndexPage() {
+
     return (
         <Stack gap={2} p={1}>
             <ActiveTimeLog enableNavigation={true}/>
@@ -126,7 +128,8 @@ export function ProjectsTicketsTable({projectId}) {
 
     const columns = [
         {field: 'name', headerName: 'Ticket name'},
-        {field: 'description', headerName: 'Description'},
+        {field: 'type', headerName: 'Type'},
+        {field: 'state', headerName: 'State'}
     ];
 
     function handleRowClick(row) {
