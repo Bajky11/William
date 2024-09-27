@@ -4,9 +4,9 @@ const modalSlice = createSlice({
     name: 'modal',
     initialState: {
         open: false,
-        ModalBody: null,
-        heading: null,
-        modalProps: null
+        ModalBody: 'empty modal',
+        heading: '',
+        modalProps: {}
     },
     reducers: {
         openModal: (state, action) => {
@@ -17,9 +17,9 @@ const modalSlice = createSlice({
         },
         closeModal: (state) => {
             state.open = false;
-            state.ModalBody = null;
-            state.heading = null;
-            state.modalProps = null;
+            state.ModalBody ='empty modal';
+            state.heading = '';
+            state.modalProps = {};
         }
     }
 });
