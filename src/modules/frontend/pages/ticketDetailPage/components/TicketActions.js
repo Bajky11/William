@@ -1,7 +1,7 @@
 import {useDispatch} from "react-redux";
 import Grid2 from "@mui/material/Unstable_Grid2";
 import {Button} from "@mui/material";
-import {openChangeTicketStateModal} from "@/modules/ticketDetailPage/modals/ChangeTicketStateModalBody";
+import {openChangeTicketStateModal} from "@/modules/frontend/pages/ticketDetailPage/modals/ChangeTicketStateModalBody";
 import {updateUserTicket} from "@/utils/redux/slices/slices";
 
 export function TicketActions({ticket, loggedUser}) {

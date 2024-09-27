@@ -1,7 +1,7 @@
 import React from 'react';
-import {TextField, Button, Container, Typography, Box, Stack} from '@mui/material';
+import {TextField, Button, Container, Typography, Stack} from '@mui/material';
 import {useLogin} from './hooks/useLogin';
-import {useForm} from "../shared/hooks/useForm";
+import {useForm} from "@/modules/shared/hooks/useForm";
 import {useRouter} from "next/router";
 
 const LoginPage = () => {

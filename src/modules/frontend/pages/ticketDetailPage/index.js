@@ -1,26 +1,21 @@
-import useSupabaseRealtimeTable from "../../utils/supabase/hooks/useSupabaseRealtimeTable";
-import {useMemo, useState} from "react";
+import useSupabaseRealtimeTable from "@/utils/supabase/hooks/useSupabaseRealtimeTable";
+import {useMemo} from "react";
 import {
     TIME_LOGS_TABLE_NAME,
     timeLogsSlice,
-    userTicketsSlice
 } from "@/utils/redux/slices/slices";
-import {Button, Divider, IconButton, Stack, Typography} from "@mui/material";
+import { IconButton, Stack, Typography} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
 import Paper from "@mui/material/Paper";
-import CustomTable from "../shared/components/CustomTable";
-import {createAndStartTimeLog} from "../shared/components/TimeLogActions";
-import {ActiveTimeLog} from "../shared/components/ActiveTimeLog";
+import CustomTable from "@/modules/shared/components/CustomTable";
+import {ActiveTimeLog} from "@/modules/shared/components/ActiveTimeLog";
 import PlayCircleRoundedIcon from "@mui/icons-material/PlayCircleRounded";
 import {updateActiveTimeLog} from "@/utils/redux/slices/activeTimeLogSlice";
 import {calculateElapsedTime} from "@/modules/shared/functions/calculateElapsedTime";
 import {ActionIconButton} from "@/modules/shared/components/ActionIconButton";
-import useModal from "@/modules/shared/hooks/useModal";
-import {DynamicForm} from "@/modules/shared/components/DynamicForm";
-import {updateTicketUserId} from "@/modules/backend/functions/updateTicketUserId";
-import {TicketActions} from "@/modules/ticketDetailPage/components/TicketActions";
-import {TicketDetails} from "@/modules/ticketDetailPage/components/TicketDetails";
-import {openNewTimeLogModal} from "@/modules/ticketDetailPage/modals/NewTimeLogModalBody";
+import {TicketActions} from "@/modules/frontend/pages/ticketDetailPage/components/TicketActions";
+import {TicketDetails} from "@/modules/frontend/pages/ticketDetailPage/components/TicketDetails";
+import {openNewTimeLogModal} from "@/modules/frontend/pages/ticketDetailPage/modals/NewTimeLogModalBody";
 
 // TODO: Consider making this page static, there may be no need for useSupabaseRealtimeTable(), and can be simply done by fetchTickets with filter
 export default function TicketDetailPage({ticketId, ticket, loggedUser}) {

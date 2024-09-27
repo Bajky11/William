@@ -3,7 +3,7 @@ import {Button, Stack, Typography} from "@mui/material";
 import ArrowDownwardRoundedIcon from "@mui/icons-material/ArrowDownwardRounded";
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
 import {openModal} from "@/utils/redux/slices/modalSlice";
-import {ticketState, ticketType} from "@/modules/ticketDetailPage/contants";
+import {ticketState, ticketType} from "@/modules/frontend/pages/ticketDetailPage/contants";
 import {useDispatch} from "react-redux";
 import {updateUserTicket} from "@/utils/redux/slices/slices";
 
@@ -52,7 +52,7 @@ function ChangeTicketStateModalBody({closeModal, ticket}) {
             <Stack direction={isMobile ? 'column' : 'row'} gap={1} alignItems={'center'}>
                 <ContainedButton label={'Analysis'} id={ticketType.analysis} type={'type'}/>
                 <Arrow/>
-                <ContainedButton label={'Development'}id={ticketType.development} type={'type'}/>
+                <ContainedButton label={'Development'} id={ticketType.development} type={'type'}/>
                 <Arrow/>
                 <ContainedButton label={'Testing'} id={ticketType.testing} type={'type'}/>
             </Stack>

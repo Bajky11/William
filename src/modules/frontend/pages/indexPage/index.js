@@ -4,12 +4,12 @@ import {
     projectTicketsSlice,
     userTicketsSlice
 } from "@/utils/redux/slices/slices";
-import useSupabaseRealtimeTable from "../../utils/supabase/hooks/useSupabaseRealtimeTable";
-import CustomTable from "../shared/components/CustomTable";
-import {Box, Button, Stack, Tab, Tabs, Typography} from "@mui/material";
-import {useMemo, useState} from "react";
+import useSupabaseRealtimeTable from "@/utils/supabase/hooks/useSupabaseRealtimeTable";
+import CustomTable from "@/modules/shared/components/CustomTable";
+import { Stack, Typography} from "@mui/material";
+import {useMemo} from "react";
 import {useRouter} from "next/router";
-import {ActiveTimeLog} from "../shared/components/ActiveTimeLog";
+import {ActiveTimeLog} from "@/modules/shared/components/ActiveTimeLog";
 import {CustomTabs} from "@/modules/shared/components/CustomTabs";
 
 export default function IndexPage() {

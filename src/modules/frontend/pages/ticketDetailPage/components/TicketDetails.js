@@ -4,7 +4,7 @@ import {getUserById} from "@/modules/backend/functions/getUserById";
 
 export function TicketDetails({ticket}) {
     //TODO: Toto hazí error, jelikož když ticket nemá žadý user_id, tak je požodavak na databázi chybný.
-    const {data: ticketOwner, loading, error} = useAsyncData(getUserById, [ticket?.user_id], [ticket?.user_id]);
+    const {data: ticketOwner /*, loading, error*/} = useAsyncData(getUserById, [ticket?.user_id], [ticket?.user_id]);
     const ticketHasOwner = ticketOwner != null;
 
     const DetailRow = ({label, value}) => {

@@ -1,3 +1,3 @@
-import Login from '../modules/loginPage';
+import Login from '../modules/frontend/pages/loginPage'
 
 export default Login;
