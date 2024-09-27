@@ -16,6 +16,7 @@ import {ActionIconButton} from "@/modules/shared/components/ActionIconButton";
 import {TicketActions} from "@/modules/frontend/pages/ticketDetailPage/components/TicketActions";
 import {TicketDetails} from "@/modules/frontend/pages/ticketDetailPage/components/TicketDetails";
 import {openNewTimeLogModal} from "@/modules/frontend/pages/ticketDetailPage/modals/NewTimeLogModalBody";
+import {TicketComments} from "@/modules/frontend/pages/ticketDetailPage/components/TicketComments/TicketComments";
 
 // TODO: Consider making this page static, there may be no need for useSupabaseRealtimeTable(), and can be simply done by fetchTickets with filter
 export default function TicketDetailPage({ticketId, ticket, loggedUser}) {
@@ -34,6 +35,7 @@ export default function TicketDetailPage({ticketId, ticket, loggedUser}) {
                     <TicketDetails ticket={ticket}/>
                 </Stack>
                 <ActiveTimeLog ticketId={ticketId}/>
+                <TicketComments ticket={ticket}/>
                 <TicketTimeLogsTable ticketId={ticketId}/>
             </Stack>
 

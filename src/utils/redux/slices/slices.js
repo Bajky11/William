@@ -11,10 +11,18 @@ const ALL_TICKETS_SLICE = 'allTickets'
 const USER_TICKETS_SLICE = 'userTickets'
 const PROJECT_TICKETS_SLICE = 'projectTickets'
 const TIME_LOGS_SLICE = 'timeLogsSlice'
+const COMMENTS_SLICE = 'commentsSlice'
 
 export const PROJECTS_TABLE_NAME = 'projects'
 export const TICKETS_TABLE_NAME = 'tickets'
 export const TIME_LOGS_TABLE_NAME = 'time_logs'
+export const COMMENTS_TABLE_NAME = 'comments'
+
+//  CommentsSlice
+export const commentsSlice = createGenericSlice(COMMENTS_SLICE, COMMENTS_TABLE_NAME);
+export const addComment = addDataThunk(COMMENTS_SLICE, COMMENTS_TABLE_NAME);
+export const removeComment = removeDataThunk(COMMENTS_SLICE, COMMENTS_TABLE_NAME);
+export const updateComment = updateDataThunk(COMMENTS_SLICE,COMMENTS_TABLE_NAME);
 
 //  ProjectsSlice
 export const projectsSlice = createGenericSlice(ALL_PROJECTS_SLICE, PROJECTS_TABLE_NAME)
@@ -42,4 +50,4 @@ export const addProjectsTicket = addDataThunk(PROJECT_TICKETS_SLICE, TICKETS_TAB
 export const removeProjectsTicket = removeDataThunk(PROJECT_TICKETS_SLICE, TICKETS_TABLE_NAME)
 
 export const timeLogsSlice = createGenericSlice(TIME_LOGS_SLICE, TIME_LOGS_TABLE_NAME);
-export const addTimeLog = addDataThunk(TIME_LOGS_SLICE,TIME_LOGS_TABLE_NAME);
+export const addTimeLog = addDataThunk(TIME_LOGS_SLICE, TIME_LOGS_TABLE_NAME);

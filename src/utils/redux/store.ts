@@ -3,6 +3,7 @@
 import {configureStore} from '@reduxjs/toolkit';
 import logger from 'redux-logger';
 import {
+    commentsSlice,
     projectsSlice,
     projectTicketsSlice, timeLogsSlice,
     userTicketsSlice
@@ -17,6 +18,7 @@ export const store = configureStore({
         modal: modalSlice,
         loggedUser: loggedUserSliceReducer,
         activeTimeLog: activeTimeLogReducer,
+        comments: commentsSlice.reducer,
         projects: projectsSlice.reducer,
         usersTickets: userTicketsSlice.reducer,
         projectsTickets: projectTicketsSlice.reducer,
