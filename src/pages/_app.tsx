@@ -11,6 +11,7 @@ import {useDrawer} from "@/modules/shared/hooks/useDrawer";
 import {closeModal} from "@/utils/redux/slices/modalSlice";
 import {DialogHeader} from "next/dist/client/components/react-dev-overlay/internal/components/Dialog";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
+import React from "react";
 
 export default function App({Component, pageProps}: AppProps) {
     const {toggleDrawer, CustomDrawer} = useDrawer()
@@ -37,7 +38,7 @@ function GlobalModal() {
         dispatch(closeModal());
     };
 
-    return modalState.open ? (
+    return modalState.open && modalState.ModalBody? (
         <Dialog open={modalState.open}>
             <Box p={4} pt={2}>
                 <DialogHeader>
@@ -56,7 +57,7 @@ function GlobalModal() {
                         <Divider/>
                     </Stack>
                 </DialogHeader>
-                <modalState.ModalBody closeModal={handleCloseModal}{...modalState.modalProps}/>
+                {React.createElement(modalState.ModalBody, { closeModal: handleCloseModal, ...modalState.modalProps })}
             </Box>
         </Dialog>
     ) : null;
