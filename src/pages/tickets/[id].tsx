@@ -1,13 +1,18 @@
 import {useRouter} from "next/router";
 import TicketDetailPage from "../../modules/ticketDetailPage"
 import {useSelector} from "react-redux";
+import {RootState} from "@/utils/redux/store";
 
 export default function Index() {
     const router = useRouter()
     const {id} = router.query;
 
-    const {data: tickets, loading: ticketsLoading, error: ticketsError} = useSelector(state => state.usersTickets)
-    const loggedUser = useSelector(state => state.loggedUser);
+    const {
+        data: tickets,
+        loading: ticketsLoading,
+        error: ticketsError
+    } = useSelector((state: RootState) => state.usersTickets)
+    const loggedUser = useSelector((state: RootState) => state.loggedUser);
 
     if (ticketsError || !loggedUser) {
         return <div>Error: {ticketsError || 'User is not logged in'}</div>;
