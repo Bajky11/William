@@ -11,8 +11,8 @@ export default function Index() {
         data: tickets,
         loading: ticketsLoading,
         error: ticketsError
-    } = useSelector((state: RootState) => state.usersTickets)
-    const loggedUser = useSelector((state: RootState) => state.loggedUser);
+    } = useSelector(state => state.usersTickets)
+    const loggedUser = useSelector(state => state.loggedUser);
 
     if (ticketsError || !loggedUser) {
         return <div>Error: {ticketsError || 'User is not logged in'}</div>;
