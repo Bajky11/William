@@ -4,7 +4,7 @@ import {
     TIME_LOGS_TABLE_NAME,
     timeLogsSlice,
 } from "@/utils/redux/slices/slices";
-import { IconButton, Stack, Typography} from "@mui/material";
+import {IconButton, Stack, Typography} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
 import Paper from "@mui/material/Paper";
 import CustomTable from "@/modules/shared/components/CustomTable";
@@ -17,6 +17,7 @@ import {TicketActions} from "@/modules/frontend/pages/ticketDetailPage/component
 import {TicketDetails} from "@/modules/frontend/pages/ticketDetailPage/components/TicketDetails";
 import {openNewTimeLogModal} from "@/modules/frontend/pages/ticketDetailPage/modals/NewTimeLogModalBody";
 import {TicketComments} from "@/modules/frontend/pages/ticketDetailPage/components/TicketComments/TicketComments";
+import {CustomAccordion} from "@/modules/shared/components/CustomAccordion";
 
 // TODO: Consider making this page static, there may be no need for useSupabaseRealtimeTable(), and can be simply done by fetchTickets with filter
 export default function TicketDetailPage({ticketId, ticket, loggedUser}) {
@@ -35,10 +36,15 @@ export default function TicketDetailPage({ticketId, ticket, loggedUser}) {
                     <TicketDetails ticket={ticket}/>
                 </Stack>
                 <ActiveTimeLog ticketId={ticketId}/>
-                <TicketComments ticket={ticket}/>
-                <TicketTimeLogsTable ticketId={ticketId}/>
+                <CustomAccordion
+                    heading={'Komentáře'}
+                    AccordionBody={<TicketComments ticket={ticket}/>}
+                />
+                <CustomAccordion
+                    heading={'Time Logs'}
+                    AccordionBody={<TicketTimeLogsTable ticketId={ticketId}/>}
+                />
             </Stack>
-
         </div>
     );
 }
@@ -89,11 +95,7 @@ function TicketTimeLogsTable({ticketId}) {
     if (!user) return 'loading'
 
     return (
-        <Stack gap={1}>
-            <Stack alignItem={'center'} justifyContent={'space-between'} direction={'row'}>
-                <Typography variant={'h5'}>Time Logs</Typography>
-            </Stack>
-            <CustomTable columns={columns} data={projects} onRowClick={handleRowClick}/>
-        </Stack>
+        <CustomTable columns={columns} data={projects} onRowClick={handleRowClick}/>
+
     )
 }
