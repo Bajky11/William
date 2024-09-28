@@ -1,9 +1,9 @@
 import React from 'react';
-import { Box, TextField, Button } from '@mui/material';
+import {Box, TextField, Button, Stack} from '@mui/material';
 
-const CommentReply = ({ replyContent, setReplyContent, handleSaveReply, handleCancelReply }) => {
+const CommentReply = ({replyContent, setReplyContent, handleSaveReply, handleCancelReply}) => {
     return (
-        <Box sx={{ mt: 1 }}>
+        <Stack pt={1}>
             <TextField
                 fullWidth
                 value={replyContent}
@@ -13,11 +13,11 @@ const CommentReply = ({ replyContent, setReplyContent, handleSaveReply, handleCa
                 variant="outlined"
                 placeholder="Napište odpověď..."
             />
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 1 }}>
+            <Box sx={{display: 'flex', justifyContent: 'flex-end', mt: 1}}>
                 <Button size="small" onClick={handleCancelReply}>Zrušit</Button>
                 <Button size="small" variant="contained" onClick={handleSaveReply}>Odeslat</Button>
             </Box>
-        </Box>
+        </Stack>
     );
 };
 

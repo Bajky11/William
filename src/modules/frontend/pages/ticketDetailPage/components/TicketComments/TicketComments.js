@@ -54,7 +54,7 @@ export function TicketComments({ticket}) {
     const commentTree = buildCommentTree(comments);
 
     return (
-        <Box> {/* sx={{ width: '100%', maxWidth: 800, mx: 'auto', p: { xs: 1, sm: 2 } }} */}
+        <Box > {/* sx={{ width: '100%', maxWidth: 800, mx: 'auto', p: { xs: 1, sm: 2 } }} */}
             <Typography variant="h5" gutterBottom>Komentáře</Typography>
 
             <Stack>

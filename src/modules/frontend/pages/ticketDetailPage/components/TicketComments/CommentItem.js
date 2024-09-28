@@ -69,7 +69,7 @@ const CommentItem = ({comment, depth = 0}) => {
         >
             <Stack direction="row" spacing={2}>
                 <Avatar sx={{width: '32px', height: '32px'}}>{comment.user_name?.charAt(0) || 'U'}</Avatar>
-                <Stack>
+                <Stack width={'100%'} pr={5}>
                     <Typography variant="subtitle1">{comment.user_name || 'Neznámý uživatel'}</Typography>
                     <Typography variant="body2" color="textSecondary">
                         {timestampToDateString(comment.created_at)} {timestampToTimeString(comment.created_at)}
