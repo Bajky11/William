@@ -10,13 +10,7 @@ import {addComment, commentsSlice, removeComment, updateComment} from "@/utils/r
 import CommentReply from './CommentReply';
 import {timestampToDateString} from "@/modules/shared/generalFunctions/time/timestampToDateString";
 import {timestampToTimeString} from "@/modules/shared/generalFunctions/time/timestampToTimeString";
-
-// Komponenta pro jednu ikonu
-const ActionIcon = ({onClick, IconComponent, ariaLabel}) => {
-    return (<IconButton size="small" aria-label={ariaLabel} onClick={onClick}>
-        <IconComponent fontSize="small"/>
-    </IconButton>);
-};
+import {ActionIcon} from "@/modules/shared/components/ActionIcon";
 
 const CommentItem = ({comment, depth = 0}) => {
     const dispatch = useDispatch();
