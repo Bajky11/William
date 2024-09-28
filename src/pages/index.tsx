@@ -1,3 +1,3 @@
-import IndexPage from "../modules/indexPage"
+import IndexPage from "../modules/frontend/pages/indexPage"
 
 export default IndexPage;

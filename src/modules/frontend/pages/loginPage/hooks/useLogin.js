@@ -1,9 +1,8 @@
 import {useDispatch} from "react-redux";
 import {useState} from "react";
-import {supabase} from "../../../utils/supabase/supabaseConfig";
-import {setLoggedUser} from "../../../utils/redux/slices/loggedUserSlice";
+import {supabase} from "@/utils/supabase/supabaseConfig";
+import {setLoggedUser} from "@/utils/redux/slices/loggedUserSlice";
 import {useRouter} from "next/router";
-import {setCookie} from 'cookies-next';
 
 export const useLogin = () => {
     const dispatch = useDispatch();

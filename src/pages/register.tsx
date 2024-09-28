@@ -1,3 +1,3 @@
-import RegisterPage from "@/modules/registerPage";
+import RegisterPage from "../modules/frontend/pages/registerPage";
 
 export default RegisterPage;

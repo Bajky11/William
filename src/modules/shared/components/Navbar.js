@@ -1,8 +1,8 @@
-import {Avatar, Box, Divider, IconButton, Stack, Typography} from "@mui/material";
+import {Avatar, IconButton, Stack, Typography} from "@mui/material";
 import {useRouter} from "next/router";
 import LogoutIcon from '@mui/icons-material/Logout';
 import {useSelector} from "react-redux";
-import {useLogout} from "@/modules/loginPage/hooks/useLogout";
+import {useLogout} from "@/modules/frontend/pages/loginPage/hooks/useLogout";
 import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
 
 export default function Navbar({openDrawer}) {
