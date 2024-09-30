@@ -32,13 +32,18 @@ export default function TicketDetailPage({ticketId, ticket, loggedUser}) {
         <div>
             <Stack gap={2} p={1}>
                 <Stack component={Paper}>
-                    <Stack bgcolor={'black'} p={1} sx={{borderRadius: '4px 4px 0 0'}} direction={'row'} gap={2}>
-                        <Typography variant={'h4'} color={'text.white'}>{ticket.name}</Typography>
-                        <EditableTypography
+                    <Stack bgcolor={'black'} p={1} sx={{borderRadius: '4px 4px 0 0'}} direction={'row'} gap={2} alignItems={'center'}>
+                        <Typography variant={'h5'} color={'text.white'}>{ticket.name}</Typography>
+
+                        {
+                            /*
+                            <EditableTypography
                         text={ticket.name}
                         onEditSave={saveEditedtName}
                         white={true}
                         />
+                             */
+                        }
                         <ActionIconButton onClick={() => openNewTimeLogModal(dispatch, loggedUser.id, ticketId)}
                                           Icon={<PlayCircleRoundedIcon fontSize={'large'}/>}/>
                     </Stack>
