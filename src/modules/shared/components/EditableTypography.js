@@ -5,18 +5,19 @@ import SaveRoundedIcon from '@mui/icons-material/SaveRounded';
 import {ActionIcon} from "@/modules/shared/components/ActionIcon";
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 
-export function EditableTypography({text, onEditSave}) {
+export function EditableTypography({text, onEditSave, white}) {
     const [newText, setNewText] = useState(text);
     const [editMode, setEditMode] = useState(false)
 
     return (
         !editMode ? (
             <Stack direction={"row"}>
-                <Typography>{text}</Typography>
+                <Typography color={'success'}>{text}</Typography>
                 <Box>
                     <ActionIcon
                         IconComponent={EditRoundedIcon}
                         onClick={() => setEditMode(true)}
+                        white={white}
                     />
                 </Box>
             </Stack>

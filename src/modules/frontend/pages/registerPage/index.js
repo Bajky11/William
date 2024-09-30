@@ -6,7 +6,7 @@ import {useRouter} from "next/router";
 
 const RegisterPage = () => {
     const router = useRouter();
-    const { error, handleRegister } = useRegister();
+    const { error, handleRegistration } = useRegister();
     const { formData, errors, handleChange, handleSubmit, setFieldError } = useForm(
         {
             firstName: '',
@@ -20,7 +20,7 @@ const RegisterPage = () => {
                 setFieldError('confirmPassword', 'Passwords do not match');
                 return;
             }
-            await handleRegister(formData.firstName, formData.lastName, formData.email, formData.password);
+            await handleRegistration(formData.firstName, formData.lastName, formData.email, formData.password);
         }
     );
 

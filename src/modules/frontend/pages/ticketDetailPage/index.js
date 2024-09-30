@@ -2,7 +2,7 @@ import useSupabaseRealtimeTable from "@/utils/supabase/hooks/useSupabaseRealtime
 import {useMemo} from "react";
 import {
     TIME_LOGS_TABLE_NAME,
-    timeLogsSlice,
+    timeLogsSlice, updateUserTicket,
 } from "@/utils/redux/slices/slices";
 import {IconButton, Stack, Typography} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
@@ -18,10 +18,15 @@ import {TicketDetails} from "@/modules/frontend/pages/ticketDetailPage/component
 import {openNewTimeLogModal} from "@/modules/frontend/pages/ticketDetailPage/modals/NewTimeLogModalBody";
 import {TicketComments} from "@/modules/frontend/pages/ticketDetailPage/components/TicketComments/TicketComments";
 import {CustomAccordion} from "@/modules/shared/components/CustomAccordion";
+import {EditableTypography} from "@/modules/shared/components/EditableTypography";
 
 // TODO: Consider making this page static, there may be no need for useSupabaseRealtimeTable(), and can be simply done by fetchTickets with filter
 export default function TicketDetailPage({ticketId, ticket, loggedUser}) {
     const dispatch = useDispatch()
+
+    function saveEditedtName(newName) {
+        dispatch(updateUserTicket({id: ticket.id, updatedData: {name: newName}}));
+    }
 
     return (
         <div>
@@ -29,6 +34,11 @@ export default function TicketDetailPage({ticketId, ticket, loggedUser}) {
                 <Stack component={Paper}>
                     <Stack bgcolor={'black'} p={1} sx={{borderRadius: '4px 4px 0 0'}} direction={'row'} gap={2}>
                         <Typography variant={'h4'} color={'text.white'}>{ticket.name}</Typography>
+                        <EditableTypography
+                        text={ticket.name}
+                        onEditSave={saveEditedtName}
+                        white={true}
+                        />
                         <ActionIconButton onClick={() => openNewTimeLogModal(dispatch, loggedUser.id, ticketId)}
                                           Icon={<PlayCircleRoundedIcon fontSize={'large'}/>}/>
                     </Stack>
