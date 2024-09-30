@@ -33,7 +33,5 @@ export default function Index() {
         return <div>Loading...</div>;
     }
 
-    console.log(tickets)
-
     return <TicketDetailPage ticketId={id} ticket={tickets[0]} loggedUser={loggedUser}/>
 }

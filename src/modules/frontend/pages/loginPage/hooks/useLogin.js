@@ -17,14 +17,14 @@ export const useLogin = () => {
             });
 
             if (error) {
-                setError(error.message);
+                setError(error);
                 return;
             }
 
             const {data: {user}, error: userError} = await supabase.auth.getUser();
 
             if (userError || !user) {
-                setError(userError ? userError.message : "Unable to fetch user after login");
+                setError(userError ? userError : "Unable to fetch user after login");
                 return;
             }
 

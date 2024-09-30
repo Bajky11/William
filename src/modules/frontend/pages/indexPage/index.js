@@ -6,11 +6,14 @@ import {
 } from "@/utils/redux/slices/slices";
 import useSupabaseRealtimeTable from "@/utils/supabase/hooks/useSupabaseRealtimeTable";
 import CustomTable from "@/modules/shared/components/CustomTable";
-import { Stack, Typography} from "@mui/material";
+import {Stack, Typography} from "@mui/material";
 import {useMemo} from "react";
 import {useRouter} from "next/router";
 import {ActiveTimeLog} from "@/modules/shared/components/ActiveTimeLog";
 import {CustomTabs} from "@/modules/shared/components/CustomTabs";
+import {useAsyncData} from "@/utils/supabase/hooks/useAsyncData";
+import {getUserById} from "@/modules/backend/functions/getUserById";
+import {getUserProject, getUserProjects} from "@/modules/backend/functions/getUserProjects";
 
 export default function IndexPage() {
 
@@ -24,14 +27,23 @@ export default function IndexPage() {
 }
 
 function ProjectsTabs() {
+    const loggedUser = useSelector(state => state.loggedUser)
+
+    /*
     useSupabaseRealtimeTable('projects', projectsSlice.actions)
     const projects = useSelector(state => state.projects.data)
+    console.log(projects)
+    */
 
-    const data = projects.map(project => {
+    const {data: projectsData } = useAsyncData(getUserProjects, [loggedUser?.id], [loggedUser?.id]);
+
+    if(!projectsData) return 'loading'
+
+    const data = projectsData.map(project => {
         return {value: project.id, headerName: project.name, render: <ProjectsTicketsTable projectId={project.id}/>}
     })
 
-    if (projects.length === 0) {
+    if (projectsData.length === 0) {
         return <Typography>No projects found</Typography>
     }
 
@@ -52,7 +64,7 @@ function AssignedTicketsTable() {
         if (loggedUserId != null) {
             return [
                 {key: 'user_id', value: loggedUserId},
-                {key: 'state',value: 'closed', negate: true}
+                {key: 'state', value: 'closed', negate: true}
             ];
         } else {
             return null;
@@ -89,7 +101,7 @@ export function ProjectsTicketsTable({projectId}) {
     const router = useRouter()
     const filters = useMemo(() => ([
             {key: 'project_id', value: projectId},
-            {key: 'state',value: 'available'},
+            {key: 'state', value: 'available'},
         ]
     ), [projectId]);
     useSupabaseRealtimeTable('tickets', projectTicketsSlice.actions, filters);

@@ -14,6 +14,10 @@ const LoginPage = () => {
         }
     );
 
+    async function logAsTestUser(name, password){
+        await handleLogin(name, password);
+    }
+
     return (
         <Container maxWidth="sm">
             <Stack
@@ -63,6 +67,8 @@ const LoginPage = () => {
                     <Typography underline={'none'}>Dont have an account?</Typography>
                     <Button onClick={() => router.push('/register')}>Create account</Button>
                 </Stack>
+                <Button variant={'text'} onClick={() => logAsTestUser('lukin.bajer@gmail.com','tajneHeslo')}>Test User: Lukáš</Button>
+                <Button variant={'text'} onClick={() => logAsTestUser('eva@email.cz','tajneHeslo')}>Test User: Eva</Button>
             </Stack>
         </Container>
     );

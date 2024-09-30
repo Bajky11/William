@@ -1,5 +1,6 @@
 import {useState} from "react";
 import {supabase} from "@/utils/supabase/supabaseConfig";
+import {createUser} from "@/modules/backend/functions/createUser";
 
 export function useRegister() {
     const [error, setError] = useState();
@@ -7,7 +8,7 @@ export function useRegister() {
     async function handleRegistration(firstName, lastName, email, password) {
 
         try {
-            const {user, error} = await supabase.auth.signUp({
+            const {data, error} = await supabase.auth.signUp({
                 email,
                 password,
             });
@@ -16,11 +17,17 @@ export function useRegister() {
                 throw error;
             }
 
-        } catch (error) {
-            setError(error);
-        }
+            try {
+                await createUser(firstName + ' ' + lastName, data.user.id);
+            } catch (e) {
+                setError('Failed to crerate internal user'); // Pokud se nepodaří vytvořit uživatel tak průser :D
+            }
 
+        } catch (error) {
+            setError(error.message);
+        }
+        alert("Registration successful")
     }
 
-    return {error, handleRegistration}
+    return {error, handleRegistration};
 }
