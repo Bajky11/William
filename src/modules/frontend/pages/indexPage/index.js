@@ -6,7 +6,7 @@ import {
 } from "@/utils/redux/slices/slices";
 import useSupabaseRealtimeTable from "@/utils/supabase/hooks/useSupabaseRealtimeTable";
 import CustomTable from "@/modules/shared/components/CustomTable";
-import {Stack, Typography} from "@mui/material";
+import {Alert, Stack, Typography} from "@mui/material";
 import {useMemo} from "react";
 import {useRouter} from "next/router";
 import {ActiveTimeLog} from "@/modules/shared/components/ActiveTimeLog";
@@ -35,16 +35,21 @@ function ProjectsTabs() {
     console.log(projects)
     */
 
-    const {data: projectsData } = useAsyncData(getUserProjects, [loggedUser?.id], [loggedUser?.id]);
+    const {data: projectsData} = useAsyncData(getUserProjects, [loggedUser?.id], [loggedUser?.id]);
 
-    if(!projectsData) return 'loading'
+    if (!projectsData) return 'loading'
 
     const data = projectsData.map(project => {
         return {value: project.id, headerName: project.name, render: <ProjectsTicketsTable projectId={project.id}/>}
     })
 
     if (projectsData.length === 0) {
-        return <Typography>No projects found</Typography>
+        return (
+            <Stack>
+                <Typography variant={'h5'}>Available Tickets</Typography>
+                <Alert severity={'warning'} >You have not been assigned to any projects, contact you administrator.</Alert>
+            </Stack>
+        )
     }
 
     return (

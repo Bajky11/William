@@ -7,6 +7,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import {Alert} from "@mui/material";
 
 const StyledTableCell = styled(TableCell)(({theme}) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -29,7 +30,7 @@ const StyledTableRow = styled(TableRow)(({theme}) => ({
     cursor: 'pointer',
 }));
 
-const CustomTable = ({columns, data, onRowClick}) => {
+const CustomTable = ({columns, data, onRowClick, noDataMessage}) => {
     const handleRowClick = (row) => {
         if (onRowClick) {
             onRowClick(row);
@@ -63,6 +64,9 @@ const CustomTable = ({columns, data, onRowClick}) => {
                     ))}
                 </TableBody>
             </Table>
+            {
+                data.length === 0 && <Alert severity={'warning'} >This table is empty.</Alert>
+            }
         </TableContainer>
     );
 };
