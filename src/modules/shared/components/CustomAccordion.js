@@ -1,11 +1,18 @@
-import {Accordion, AccordionDetails, AccordionSummary, Typography} from "@mui/material";
+import React, { useState } from 'react';
+import { Accordion, AccordionDetails, AccordionSummary, Typography } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-export function CustomAccordion({heading, AccordionBody}) {
+export function CustomAccordion({ heading, AccordionBody, defaultExpanded = false }) {
+    const [expanded, setExpanded] = useState(defaultExpanded);
+
+    const handleChange = () => {
+        setExpanded(!expanded);
+    };
+
     return (
-        <Accordion>
+        <Accordion expanded={expanded} onChange={handleChange}>
             <AccordionSummary
-                expandIcon={<ExpandMoreIcon/>}
+                expandIcon={<ExpandMoreIcon />}
             >
                 <Typography>{heading}</Typography>
             </AccordionSummary>
@@ -13,5 +20,5 @@ export function CustomAccordion({heading, AccordionBody}) {
                 {AccordionBody}
             </AccordionDetails>
         </Accordion>
-    )
+    );
 }

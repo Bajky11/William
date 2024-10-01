@@ -5,7 +5,7 @@ import logger from 'redux-logger';
 import {
     commentsSlice,
     projectsSlice,
-    projectTicketsSlice, timeLogsSlice,
+    projectTicketsSlice, ticketTasksSlice, timeLogsSlice,
     userTicketsSlice
 } from "@/utils/redux/slices/slices";
 import loggedUserSliceReducer from "@/utils/redux/slices/loggedUserSlice";
@@ -22,9 +22,10 @@ export const store = configureStore({
         projects: projectsSlice.reducer,
         usersTickets: userTicketsSlice.reducer,
         projectsTickets: projectTicketsSlice.reducer,
-        timeLogs: timeLogsSlice.reducer
+        timeLogs: timeLogsSlice.reducer,
+        ticketTasks: ticketTasksSlice.reducer
     },
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
+    //middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

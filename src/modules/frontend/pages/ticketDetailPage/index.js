@@ -1,6 +1,7 @@
 import useSupabaseRealtimeTable from "@/utils/supabase/hooks/useSupabaseRealtimeTable";
 import {useMemo} from "react";
 import {
+    TICKET_TASKS_TABLE_NAME, ticketTasksSlice,
     TIME_LOGS_TABLE_NAME,
     timeLogsSlice, updateUserTicket,
 } from "@/utils/redux/slices/slices";
@@ -19,6 +20,7 @@ import {openNewTimeLogModal} from "@/modules/frontend/pages/ticketDetailPage/mod
 import {TicketComments} from "@/modules/frontend/pages/ticketDetailPage/components/TicketComments/TicketComments";
 import {CustomAccordion} from "@/modules/shared/components/CustomAccordion";
 import {EditableTypography} from "@/modules/shared/components/EditableTypography";
+import TicketPlan from "@/modules/frontend/pages/ticketDetailPage/components/TicketPlan";
 
 // TODO: Consider making this page static, there may be no need for useSupabaseRealtimeTable(), and can be simply done by fetchTickets with filter
 export default function TicketDetailPage({ticketId, ticket, loggedUser}) {
@@ -32,7 +34,8 @@ export default function TicketDetailPage({ticketId, ticket, loggedUser}) {
         <div>
             <Stack gap={2} p={1}>
                 <Stack component={Paper}>
-                    <Stack bgcolor={'black'} p={1} sx={{borderRadius: '4px 4px 0 0'}} direction={'row'} gap={2} alignItems={'center'}>
+                    <Stack bgcolor={'black'} p={1} sx={{borderRadius: '4px 4px 0 0'}} direction={'row'} gap={2}
+                           alignItems={'center'}>
                         <Typography variant={'h5'} color={'text.white'}>{ticket.name}</Typography>
 
                         {
@@ -52,12 +55,18 @@ export default function TicketDetailPage({ticketId, ticket, loggedUser}) {
                 </Stack>
                 <ActiveTimeLog ticketId={ticketId}/>
                 <CustomAccordion
+                    heading={'Plan'}
+                    AccordionBody={<TicketPlan ticketId={ticketId}/>}
+                    defaultExpanded={true}
+                />
+                <CustomAccordion
                     heading={'Komentáře'}
                     AccordionBody={<TicketComments ticket={ticket}/>}
                 />
                 <CustomAccordion
                     heading={'Time Logs'}
                     AccordionBody={<TicketTimeLogsTable ticketId={ticketId}/>}
+                    defaultExpanded={true}
                 />
             </Stack>
         </div>

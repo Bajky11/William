@@ -29,7 +29,9 @@ const useSupabaseRealtimeTable = (tableName, sliceActions, filters = null, enabl
             console.error('Error fetching data:', error);
             return;
         }
-
+        console.log(`fetched data from table: ${tableName}`)
+        console.log(data)
+        console.log('')
         dispatch(sliceActions.setData(data));
     };
 
