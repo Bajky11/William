@@ -1,7 +1,6 @@
 import useSupabaseRealtimeTable from "@/utils/supabase/hooks/useSupabaseRealtimeTable";
 import {useMemo} from "react";
 import {
-    TICKET_TASKS_TABLE_NAME, ticketTasksSlice,
     TIME_LOGS_TABLE_NAME,
     timeLogsSlice, updateUserTicket,
 } from "@/utils/redux/slices/slices";
@@ -19,7 +18,6 @@ import {TicketDetails} from "@/modules/frontend/pages/ticketDetailPage/component
 import {openNewTimeLogModal} from "@/modules/frontend/pages/ticketDetailPage/modals/NewTimeLogModalBody";
 import {TicketComments} from "@/modules/frontend/pages/ticketDetailPage/components/TicketComments/TicketComments";
 import {CustomAccordion} from "@/modules/shared/components/CustomAccordion";
-import {EditableTypography} from "@/modules/shared/components/EditableTypography";
 import TicketPlan from "@/modules/frontend/pages/ticketDetailPage/components/TicketPlan";
 
 // TODO: Consider making this page static, there may be no need for useSupabaseRealtimeTable(), and can be simply done by fetchTickets with filter
@@ -76,7 +74,11 @@ export default function TicketDetailPage({ticketId, ticket, loggedUser}) {
 
 function TicketTimeLogsTable({ticketId}) {
     const dispatch = useDispatch()
-    const filter = useMemo(() => ([{key: 'ticket_id', value: ticketId}]), [ticketId])
+    const loggedUser = useSelector(state => state.loggedUser);
+    const filter = useMemo(() => ([
+        {key: 'ticket_id', value: ticketId},
+        {key: 'user_id', value: loggedUser.id}
+    ]), [ticketId])
     const enabled = ticketId != null;
     useSupabaseRealtimeTable(TIME_LOGS_TABLE_NAME, timeLogsSlice.actions, filter, enabled);
     const projects = useSelector((state) => state.timeLogs.data);
