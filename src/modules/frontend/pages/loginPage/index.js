@@ -8,7 +8,6 @@ const LoginPage = () => {
     const router = useRouter();
     const {error, handleLogin} = useLogin();
     const {formData, errors, handleChange, handleSubmit} = useForm(
-        {email: 'lukin.bajer@gmail.com', password: 'tajneHeslo'},
         async (formData) => {
             await handleLogin(formData.email, formData.password);
         }

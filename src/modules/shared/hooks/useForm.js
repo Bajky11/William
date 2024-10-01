@@ -1,5 +1,14 @@
 import { useState } from 'react';
 
+/*
+const {formData, errors, handleChange, handleSubmit} = useForm(
+    {email: 'adsadasd@gmail.com', password: 'asdfdsfasdf'},
+    async (formData) => {
+        await handleLogin(formData.email, formData.password);
+    }
+);
+ */
+
 export const useForm = (initialValues, onSubmit) => {
     const [formData, setFormData] = useState(initialValues);
     const [errors, setErrors] = useState({});
