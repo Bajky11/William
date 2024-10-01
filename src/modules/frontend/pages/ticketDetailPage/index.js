@@ -19,6 +19,7 @@ import {openNewTimeLogModal} from "@/modules/frontend/pages/ticketDetailPage/mod
 import {TicketComments} from "@/modules/frontend/pages/ticketDetailPage/components/TicketComments/TicketComments";
 import {CustomAccordion} from "@/modules/shared/components/CustomAccordion";
 import TicketPlan from "@/modules/frontend/pages/ticketDetailPage/components/TicketPlan";
+import {EditableTypography} from "@/modules/shared/components/EditableTypography";
 
 // TODO: Consider making this page static, there may be no need for useSupabaseRealtimeTable(), and can be simply done by fetchTickets with filter
 export default function TicketDetailPage({ticketId, ticket, loggedUser}) {
@@ -34,17 +35,13 @@ export default function TicketDetailPage({ticketId, ticket, loggedUser}) {
                 <Stack component={Paper}>
                     <Stack bgcolor={'black'} p={1} sx={{borderRadius: '4px 4px 0 0'}} direction={'row'} gap={2}
                            alignItems={'center'}>
-                        <Typography variant={'h5'} color={'text.white'}>{ticket.name}</Typography>
-
-                        {
-                            /*
-                            <EditableTypography
-                        text={ticket.name}
-                        onEditSave={saveEditedtName}
-                        white={true}
+                        <EditableTypography
+                            text={ticket.name}
+                            onEditSave={saveEditedtName}
+                            textColor={'#fff'}
+                            iconColor={'#fff'}
+                            variant={'h5'}
                         />
-                             */
-                        }
                         <ActionIconButton onClick={() => openNewTimeLogModal(dispatch, loggedUser.id, ticketId)}
                                           Icon={<PlayCircleRoundedIcon fontSize={'large'}/>}/>
                     </Stack>

@@ -1,10 +1,15 @@
-import {Box, IconButton} from "@mui/material";
+import { Box, IconButton } from "@mui/material";
 import React from "react";
 
-export const ActionIcon = ({onClick, IconComponent, ariaLabel, white}) => {
+export const ActionIcon = ({ onClick, IconComponent, ariaLabel, color }) => {
     return (
         <Box>
-            <IconButton color={white ? 'white' : 'black'} size="small" aria-label={ariaLabel} onClick={onClick}>
+            <IconButton
+                size="small"
+                aria-label={ariaLabel}
+                onClick={onClick}
+                sx={{ color: color || '#000' }}
+            >
                 <IconComponent fontSize="small" />
             </IconButton>
         </Box>
