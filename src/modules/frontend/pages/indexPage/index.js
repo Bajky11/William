@@ -1,5 +1,6 @@
 import {useSelector} from 'react-redux';
 import {
+    PROJECTS_TABLE_NAME,
     projectsSlice,
     projectTicketsSlice,
     userTicketsSlice
@@ -34,16 +35,26 @@ function ProjectsTabs() {
     const projects = useSelector(state => state.projects.data)
     console.log(projects)
     */
+    //const {data: projectsData} = useAsyncData(getUserProjects, [loggedUser?.id], [loggedUser?.id]);
 
-    const {data: projectsData} = useAsyncData(getUserProjects, [loggedUser?.id], [loggedUser?.id]);
+    const filter = useMemo(() => {
+        if (loggedUser) {
+            return [
+                {key: 'user_id', value: loggedUser.id}
+            ]
+        }
+        return []
+    }, [loggedUser])
+    useSupabaseRealtimeTable(PROJECTS_TABLE_NAME, projectsSlice.actions,filter);
+    const projects = useSelector(state => state.projects.data)
 
-    if (!projectsData) return 'loading'
+    if (!projects) return 'loading'
 
-    const data = projectsData.map(project => {
+    const data = projects.map(project => {
         return {value: project.id, headerName: project.name, render: <ProjectsTicketsTable projectId={project.id}/>}
     })
 
-    if (projectsData.length === 0) {
+    if (projects.length === 0) {
         return (
             <Stack>
                 <Typography variant={'h5'}>Available Tickets</Typography>

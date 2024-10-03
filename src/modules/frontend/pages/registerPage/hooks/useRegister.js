@@ -1,9 +1,11 @@
 import {useState} from "react";
 import {supabase} from "@/utils/supabase/supabaseConfig";
 import {createUser} from "@/modules/backend/functions/createUser";
+import {useRouter} from "next/router";
 
 export function useRegister() {
     const [error, setError] = useState();
+    const navigate = useRouter()
 
     async function handleRegistration(firstName, lastName, email, password) {
 
@@ -26,7 +28,10 @@ export function useRegister() {
         } catch (error) {
             setError(error.message);
         }
+
+
         alert("Registration successful")
+        await navigate.push('/login')
     }
 
     return {error, handleRegistration};

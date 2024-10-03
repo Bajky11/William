@@ -3,17 +3,19 @@ import {addProject} from "@/utils/redux/slices/slices";
 import {DynamicForm} from "@/modules/shared/components/DynamicForm";
 import {openModal} from "@/utils/redux/slices/modalSlice";
 
-export function openAddProjectModal(dispatch) {
+export function openAddProjectModal(dispatch, userId) {
     dispatch(openModal({
         ModalBody: AddProjectModalBody,
-        heading: "Nový Projekt"
+        heading: "Nový Projekt",
+        modalProps: {userId}
     }))
 }
 
- const AddProjectModalBody = ({closeModal}) => {
+const AddProjectModalBody = ({closeModal, userId}) => {
     const dispatch = useDispatch()
 
     const handleSubmit = async (formData) => {
+        formData.user_id = userId;
         dispatch(addProject(formData))
         closeModal()
     };

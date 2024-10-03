@@ -8,6 +8,7 @@ const LoginPage = () => {
     const router = useRouter();
     const {error, handleLogin} = useLogin();
     const {formData, errors, handleChange, handleSubmit} = useForm(
+        {email: '', password: ''},
         async (formData) => {
             await handleLogin(formData.email, formData.password);
         }
@@ -63,11 +64,11 @@ const LoginPage = () => {
                 </form>
                 {error && <Typography color="error" sx={{mt: 2}}>{error.message}</Typography>}
                 <Stack>
-                    <Typography underline={'none'}>Dont have an account?</Typography>
-                    <Button onClick={() => router.push('/register')}>Create account</Button>
+                    <Typography underline={'none'} >Dont have an account?</Typography>
+                    <Button color={'action'} onClick={() => router.push('/register')}>Create account</Button>
                 </Stack>
                 <Button variant={'text'} onClick={() => logAsTestUser('lukin.bajer@gmail.com','tajneHeslo')}>Test User: Lukáš</Button>
-                <Button variant={'text'} onClick={() => logAsTestUser('eva@email.cz','tajneHeslo')}>Test User: Eva</Button>
+                <Button variant={'text'} onClick={() => logAsTestUser('test1@email.cz','testUser1')}>Test User: Test1</Button>
             </Stack>
         </Container>
     );

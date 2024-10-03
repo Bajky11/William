@@ -10,6 +10,7 @@ import CustomTable from "@/modules/shared/components/CustomTable";
 import {useRouter} from "next/router";
 import CustomMenu from "@/modules/shared/components/CustomMenu/CustomMenu";
 import {openAddProjectModal} from "@/modules/frontend/pages/AllProjects/modals/AddProjectModal";
+import {useMemo} from "react";
 
 export default function AllProjects() {
     return (
@@ -19,7 +20,16 @@ export default function AllProjects() {
 
 function ProjectsTable() {
     const dispatch = useDispatch();
-    useSupabaseRealtimeTable(PROJECTS_TABLE_NAME, projectsSlice.actions);
+    const loggedUser = useSelector(state => state.loggedUser);
+    const filter = useMemo(() => {
+        if (loggedUser) {
+            return [
+                {key: 'user_id', value: loggedUser.id}
+            ]
+        }
+        return []
+    }, [loggedUser])
+    useSupabaseRealtimeTable(PROJECTS_TABLE_NAME, projectsSlice.actions, filter);
     const projects = useSelector((state) => state.projects.data);
     const router = useRouter();
 
@@ -56,7 +66,8 @@ function ProjectsTable() {
             <Stack p={1} gap={1}>
                 <Stack direction={'row'} alignItems={'center'} justifyContent={'space-between'} pl={0.5}>
                     <Typography variant={'h5'}>Projects List</Typography>
-                    <Button variant={'contained'} size={'small'} onClick={() => openAddProjectModal(dispatch)}>Add</Button>
+                    <Button variant={'contained'} size={'small'}
+                            onClick={() => openAddProjectModal(dispatch, loggedUser.id)}>Add</Button>
                 </Stack>
                 <CustomTable columns={columns} data={projects} onRowClick={handleRowClick}/>
             </Stack>
