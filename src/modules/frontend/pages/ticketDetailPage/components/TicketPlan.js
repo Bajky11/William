@@ -195,20 +195,7 @@ const TicketPlan = ({ ticketId }) => {
             )}
 
             {/* Show input for adding tasks if in edit mode */}
-            {tasks.length === 0 && editMode && (
-                <Stack direction={'row'} alignItems={'center'} spacing={1}>
-                    <TextField
-                        label="New Task Name"
-                        value={newTaskName}
-                        onChange={(e) => setNewTaskName(e.target.value)}
-                        size="small"
-                        fullWidth
-                    />
-                    <IconButton onClick={addTask} sx={{ mt: 1 }}>
-                        <AddIcon /> {/* Icon for adding a task */}
-                    </IconButton>
-                </Stack>
-            )}
+
 
             <List>
                 {tasks.map(task => (
@@ -225,6 +212,21 @@ const TicketPlan = ({ ticketId }) => {
                     />
                 ))}
             </List>
+
+            { editMode && (
+                <Stack direction={'row'} alignItems={'center'} spacing={1}>
+                    <TextField
+                        label="New Task Name"
+                        value={newTaskName}
+                        onChange={(e) => setNewTaskName(e.target.value)}
+                        size="small"
+                        fullWidth
+                    />
+                    <IconButton onClick={addTask} sx={{ mt: 1 }}>
+                        <AddIcon /> {/* Icon for adding a task */}
+                    </IconButton>
+                </Stack>
+            )}
         </Box>
     );
 };
