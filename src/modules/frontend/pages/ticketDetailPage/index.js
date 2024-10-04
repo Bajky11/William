@@ -20,6 +20,7 @@ import {TicketComments} from "@/modules/frontend/pages/ticketDetailPage/componen
 import {CustomAccordion} from "@/modules/shared/components/CustomAccordion";
 import TicketPlan from "@/modules/frontend/pages/ticketDetailPage/components/TicketPlan";
 import {EditableTypography} from "@/modules/shared/components/EditableTypography";
+import {timestampToDateString} from "@/modules/shared/generalFunctions/time/timestampToDateString";
 
 // TODO: Consider making this page static, there may be no need for useSupabaseRealtimeTable(), and can be simply done by fetchTickets with filter
 export default function TicketDetailPage({ticketId, ticket, loggedUser}) {
@@ -91,7 +92,13 @@ function TicketTimeLogsTable({ticketId}) {
     }
 
     const columns = [
-        {field: 'description', headerName: 'Description'},
+        {
+            field: 'date',
+            headerName: 'Date',
+            render:(_,row) => {
+                 return timestampToDateString(row.date);
+            }
+        },
         {
             field: 'elapsed',
             headerName: 'Elapsed',
@@ -99,6 +106,7 @@ function TicketTimeLogsTable({ticketId}) {
                 return <p>{calculateElapsedTime(row)}</p>
             }
         },
+        {field: 'description', headerName: 'Description'},
         {
             field: 'action',
             headerName: "Action",
